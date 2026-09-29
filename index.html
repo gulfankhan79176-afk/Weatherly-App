@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A modern weather dashboard using Open-Meteo APIs.">
+  <title>Weatherly — Modern Weather Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+  <div class="page-glow glow-one"></div>
+  <div class="page-glow glow-two"></div>
+
+  <nav class="navbar navbar-expand-lg weather-nav">
+    <div class="container">
+      <a class="navbar-brand" href="#home">
+        <span class="brand-icon"><i class="fa-solid fa-cloud-sun"></i></span>
+        <span>Weatherly</span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarContent" aria-controls="navbarContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#weather">Weather</a></li>
+          <li class="nav-item"><a class="nav-link" href="#cities">Cities</a></li>
+        </ul>
+
+        <form id="searchForm" class="search-box" role="search">
+          <i class="fa-solid fa-location-dot search-icon"></i>
+          <input id="city" type="search"
+            placeholder="Search city, e.g. Agra"
+            aria-label="Search city" autocomplete="off">
+          <button type="submit" id="submitBtn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Search</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <main id="home" class="container py-5">
+    <section class="hero text-center">
+      <div class="hero-badge">
+        <span class="live-dot"></span>
+        LIVE WEATHER
+      </div>
+
+      <h1>Weather for <span id="cityName">Delhi</span></h1>
+      <p id="locationMeta" class="location-meta">
+        <i class="fa-solid fa-location-dot"></i> Loading location...
+      </p>
+    </section>
+
+    <div id="status" class="alert d-none" role="alert"></div>
+
+    <div id="loading" class="loading-state d-none">
+      <div class="spinner-border" role="status" aria-label="Loading"></div>
+      <span>Fetching latest weather...</span>
+    </div>
+
+    <section id="weather" class="mb-5">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="weather-card current-card h-100">
+            <div class="card-topline">
+              <span class="card-label"><i class="fa-solid fa-temperature-half"></i> Current temperature</span>
+              <span class="mini-icon"><i class="fa-solid fa-sun"></i></span>
+            </div>
+
+            <div class="current-temp"><span id="temp">--</span><sup>°C</sup></div>
+            <div id="condition" class="condition">--</div>
+            <div class="feels-line">
+              <i class="fa-regular fa-face-smile"></i>
+              Feels like <strong id="feelsLike">--</strong>°C
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="weather-card h-100">
+            <div class="card-topline">
+              <span class="card-label"><i class="fa-solid fa-chart-simple"></i> Today's range</span>
+              <span class="mini-icon"><i class="fa-solid fa-temperature-three-quarters"></i></span>
+            </div>
+
+            <div class="metric-row">
+              <span><i class="fa-solid fa-arrow-down metric-icon"></i> Minimum</span>
+              <strong><span id="minTemp">--</span>°C</strong>
+            </div>
+            <div class="metric-row">
+              <span><i class="fa-solid fa-arrow-up metric-icon"></i> Maximum</span>
+              <strong><span id="maxTemp">--</span>°C</strong>
+            </div>
+            <div class="metric-row">
+              <span><i class="fa-solid fa-droplet metric-icon"></i> Humidity</span>
+              <strong><span id="humidity">--</span>%</strong>
+            </div>
+            <div class="metric-row">
+              <span><i class="fa-solid fa-cloud metric-icon"></i> Cloud cover</span>
+              <strong><span id="cloudCover">--</span>%</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="weather-card h-100">
+            <div class="card-topline">
+              <span class="card-label"><i class="fa-solid fa-wind"></i> Wind & sun</span>
+              <span class="mini-icon"><i class="fa-solid fa-compass"></i></span>
+            </div>
+
+            <div class="metric-row">
+              <span><i class="fa-solid fa-wind metric-icon"></i> Wind speed</span>
+              <strong><span id="windSpeed">--</span> km/h</strong>
+            </div>
+            <div class="metric-row">
+              <span><i class="fa-solid fa-compass metric-icon"></i> Direction</span>
+              <strong id="windDirection">--</strong>
+            </div>
+            <div class="metric-row">
+              <span><i class="fa-solid fa-sun metric-icon"></i> Sunrise</span>
+              <strong id="sunrise">--</strong>
+            </div>
+            <div class="metric-row">
+              <span><i class="fa-solid fa-moon metric-icon"></i> Sunset</span>
+              <strong id="sunset">--</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="updated-pill text-center">
+        <i class="fa-regular fa-clock"></i>
+        <span id="updatedAt"></span>
+      </div>
+    </section>
+
+    <section id="cities">
+      <div class="section-heading text-center">
+        <div class="hero-badge small-badge">QUICK LOOK</div>
+        <h2>Weather across popular cities</h2>
+        <p>Compare live conditions at a glance.</p>
+      </div>
+
+      <div class="table-responsive weather-table-wrap">
+        <table class="table align-middle mb-0">
+          <thead>
+            <tr>
+              <th>City</th>
+              <th>Temperature</th>
+              <th>Feels like</th>
+              <th>Humidity</th>
+              <th>Min</th>
+              <th>Max</th>
+              <th>Wind</th>
+              <th>Condition</th>
+            </tr>
+          </thead>
+          <tbody id="citiesBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-brand">
+        <span class="brand-icon"><i class="fa-solid fa-cloud-sun"></i></span>
+        <strong>Weatherly</strong>
+      </div>
+      <p>Weather data provided by Open-Meteo. Forecast/model values can differ from local weather stations.</p>
+      <span class="footer-copy">Built with HTML • CSS • JavaScript</span>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
